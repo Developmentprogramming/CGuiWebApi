@@ -1,0 +1,43 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const fs = require('fs');
+
+const gallery = require('./controllers/gallery');
+const docs = require('./controllers/docs');
+const installation = require('./controllers/installation');
+
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
+
+app.get('/gallery', (req, res) => {
+  gallery.handlers.handleGallery(req, res);
+})
+
+app.get('/docs/:target', (req, res) => {
+  docs.handlers.handleDocs(req, res);
+})
+
+app.get('/installation/downloadinfo', (req, res) => {
+  installation.handleInstallation(req, res);
+})
+
+app.get('/support', (req, res) => {
+  gallery.handlers.handleSupport(req, res)
+})
+
+app.get('/usage/:target', (req, res) => {
+  fs.readdir(`./Usage/${req.params.target}`, async (err, data) => {
+    const contents = data.map((file, i) => {
+      return fs.readFileSync(`./Usage/${req.params.target}/${file}`, 'UTF-8').split('/\r?\n/')[0]
+    })
+
+    const results = await docs.handlers.usageResult(req.params.target);
+
+    res.status(200).json({ results, examples: contents });
+  })
+})
+
+app.listen(3001);
+console.log('Listening on port 3001');
