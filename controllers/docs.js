@@ -1,22 +1,12 @@
-const db = require('knex')({
-  client: 'pg',
-  connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : 'Developer@CGui',
-    database : 'docs'
-  }
-})
-
-const getList = async (res) => {
-  const titles = (await db('list')).map(dbdata => dbdata.title);
+const getList = async (res, db) => {
+  const titles = (await db('docs_list')).map(dbdata => dbdata.title);
 
   const filerdtitles = titles.filter((a, b) => titles.indexOf(a) === b);
 
   var finalContent = [];
 
   filerdtitles.forEach(title => {
-    db('list').where('title', title).orderBy('name').then(dbdata => {
+    db('docs_list').where('title', title).orderBy('name').then(dbdata => {
       const innerContent = [];
       innerContent.push({
         title: title,
@@ -36,19 +26,19 @@ const getList = async (res) => {
 
 }
 
-const handleDocs = async (req, res) => {
-  const names = (await db('list')).map(dbdata => dbdata.name);
+const handleDocs = async (req, res, db) => {
+  const names = (await db('docs_list')).map(dbdata => dbdata.name);
 
   if(req.params.target === 'list')
-    getList(res);
+    getList(res, db);
 
   names.forEach(async name => {
     if(req.params.target === name) {
-      const maindata = await db('main').where('title', name);
-      const reladata = (await db('relations').where('title', name)).map(rela => { return { name: rela.name, value: rela.value } });
-      const funcdata = (await db('functions').where('title', name).orderBy('arrid')).map(func => { return { returnType: func.returntype, functionSyntax: func.functionsyntax } });
-      const defaultvalues = await db('defaultvalues').where({ title: name, })
-      const descfunc = (await db('descriptivefunctions').where('title', name).orderBy('arrid')).map(desc => {
+      const maindata = await db('docs_main').where('title', name);
+      const reladata = (await db('docs_relations').where('title', name)).map(rela => { return { name: rela.name, value: rela.value } });
+      const funcdata = (await db('docs_functions').where('title', name).orderBy('arrid')).map(func => { return { returnType: func.returntype, functionSyntax: func.functionsyntax } });
+      const defaultvalues = await db('docs_funcs_defaultvalues').where({ title: name, })
+      const descfunc = (await db('docs_descriptivefunctions').where('title', name).orderBy('arrid')).map(desc => {
         const finaldfValue = [];
 
         var id = setInterval(() => {
@@ -70,13 +60,13 @@ const handleDocs = async (req, res) => {
           defaultValues: finaldfValue
         }
       });
-      const enums = (await db('enums').where('title', name)).map(e => e.name);
+      const enums = (await db('docs_enums').where('title', name)).map(e => e.name);
 
       const enumsfilterd = enums.filter((a, b) => enums.indexOf(a) === b);
 
       const finalContent = [];
       enumsfilterd.forEach(enums => {
-        db('enums').where('name', enums).then(inndata => {
+        db('docs_enums').where('name', enums).then(inndata => {
           const contents = inndata.map(idata => {
             return {
               name: idata.enumvalue,
@@ -114,8 +104,8 @@ const handleDocs = async (req, res) => {
   })
 }
 
-const usageResult = async (target) => {
-  return await db('resultsimgsrc').where('title', target).orderBy('arrid')
+const usageResult = async (target, db) => {
+  return await db('docs_resultsimgsrc').where('title', target).orderBy('arrid')
 }
 
 exports.handlers = { usageResult, handleDocs };

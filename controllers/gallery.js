@@ -1,19 +1,11 @@
-const db = require('knex')({
-  client: 'pg',
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
-  }
-})
-
-const handleGallery = async (req, res) => {
-  const titles = (await db('main')).map(dbdata => dbdata.title);
+const handleGallery = async (req, res, db) => {
+  const titles = (await db('gallery_main')).map(dbdata => dbdata.title);
 
   const filterdTitles = titles.filter((a, b) => titles.indexOf(a) === b);
 
   var finalContent = [];
   filterdTitles.forEach(title => {
-    db('main').where('title', title).orderBy('name').then(data => {
+    db('gallery_main').where('title', title).orderBy('name').then(data => {
       const innerContent = [];
       innerContent.push({
         title: title,
@@ -40,7 +32,7 @@ const handleGallery = async (req, res) => {
   })
 }
 
-const handleSupport = (req, res) => {
+const handleSupport = (req, res, db) => {
   db('support').then(result => { res.status(200).json(result) });
 }
 
