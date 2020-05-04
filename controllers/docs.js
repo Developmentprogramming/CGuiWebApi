@@ -117,6 +117,7 @@ const usage = async (target, db, res) => {
     }
 
     const final = [];
+    let ok = false;
     const req = https.request(options, (response) => {
       response.setEncoding('utf8');
 
@@ -131,7 +132,7 @@ const usage = async (target, db, res) => {
       })
 
       lr.on('end', () => {
-        senddata = true;
+        ok = true;
       })
     })
 
@@ -142,9 +143,16 @@ const usage = async (target, db, res) => {
 
     req.end();
 
-    return {
-      example: final.join('\n'),
-      resultimgsrc: innerData.imgsrc
+    while(true) {
+      if(ok) {
+        return {
+          example: final.join('\n'),
+          resultimgsrc: innerData.imgsrc
+        }
+      }
+      else {
+        continue;
+      }
     }
   })
 
