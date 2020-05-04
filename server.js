@@ -11,10 +11,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/gallery', (req, res) => {
+app.get('/gallery', async (req, res) => {
   try {
-    gallery.handlers.handleGallery(req, res);
-
+    await gallery.handlers.handleGallery(req, res);
   }
   catch(all) {
     console.log(all)
