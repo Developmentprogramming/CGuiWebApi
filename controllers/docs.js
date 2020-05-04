@@ -151,6 +151,7 @@ const usage = async (target, db, res) => {
   var id = setInterval(() => {
     if(retValue.length === data.length)
       res.status(200).json(retValue);
+      clearInterval(id);
   })
 }
 
