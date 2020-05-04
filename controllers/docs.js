@@ -116,8 +116,8 @@ const usage = async (target, db, res) => {
       method: 'GET'
     }
 
+    const final = [];
     const req = https.request(options, (response) => {
-      const final = [];
       response.setEncoding('utf8');
 
       lr = new linebyline(response);
@@ -131,10 +131,7 @@ const usage = async (target, db, res) => {
       })
 
       lr.on('end', () => {
-        res.status(200).json({
-          example: final.join('\n'),
-          resultimgsrc: innerData.imgsrc
-        })
+        senddata = true;
       })
     })
 
@@ -144,7 +141,14 @@ const usage = async (target, db, res) => {
     })
 
     req.end();
+
+    return {
+      example: final.join('\n'),
+      resultimgsrc: innerData.imgsrc
+    }
   })
+
+  res.status(200).json(retValue);
 }
 
 exports.handlers = { usage, handleDocs };
