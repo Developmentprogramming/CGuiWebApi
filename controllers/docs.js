@@ -117,7 +117,6 @@ const usage = async (target, db, res) => {
     }
 
     const final = [];
-    let ok = false;
     const req = https.request(options, (response) => {
       response.setEncoding('utf8');
 
@@ -132,7 +131,7 @@ const usage = async (target, db, res) => {
       })
 
       lr.on('end', () => {
-        ok = true;
+
       })
     })
 
@@ -143,21 +142,16 @@ const usage = async (target, db, res) => {
 
     req.end();
 
-    let finalContent;
-    var id = setInterval(() => {
-      if(ok) {
-        finalContent = {
-          example: final.join('\n'),
-          resultimgsrc: innerData.imgsrc
-        }
-        clearInterval(id);
-      }
-    })
-
-    return finalContent;
+    return {
+      example: final.join('\n'),
+      resultimgsrc: innerData.imgsrc
+    }
   })
 
-  res.status(200).json(retValue);
+  var id = setInterval(() => {
+    if(retValue.length === data.length)
+      res.status(200).json(retValue);
+  })
 }
 
 exports.handlers = { usage, handleDocs };
