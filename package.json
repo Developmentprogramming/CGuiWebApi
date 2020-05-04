@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node --unhandled-rejections=strict server.js"
+    "start": "node --unhandled-rejections=warn server.js"
   },
   "author": "",
   "license": "ISC",
