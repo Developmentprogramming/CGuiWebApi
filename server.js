@@ -30,7 +30,7 @@ app.get('/gallery', async (req, res) => {
 })
 
 app.get('/docs/:target', (req, res) => {
-  docs.handlers.handleDocs(req, res, db);
+  docs.handlers.handleDocs(req, res);
 })
 
 app.get('/installation/downloadinfo', (req, res) => {
@@ -42,15 +42,7 @@ app.get('/support', (req, res) => {
 })
 
 app.get('/usage/:target', (req, res) => {
-  fs.readdir(`./Usage/${req.params.target}`, async (err, data) => {
-    const contents = data.map((file, i) => {
-      return fs.readFileSync(`./Usage/${req.params.target}/${file}`, 'UTF-8').split('/\r?\n/')[0]
-    })
-
-    const results = await docs.handlers.usageResult(req.params.target, db);
-
-    res.status(200).json({ results, examples: contents });
-  })
+  docs.handlers.usage(req.params.target, db, res);
 })
 
 app.listen(process.env.PORT || 3001, () => {

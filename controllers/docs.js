@@ -104,8 +104,9 @@ const handleDocs = async (req, res, db) => {
   })
 }
 
-const usageResult = async (target, db) => {
-  return await db('docs_resultsimgsrc').where('title', target).orderBy('arrid')
+const usage = async (target, db, res) => {
+  const data = await db('docs_usage').where('title', target).orderBy('arrid');
+  console.log(data);
 }
 
-exports.handlers = { usageResult, handleDocs };
+exports.handlers = { usage, handleDocs };
