@@ -10,13 +10,14 @@ const installation = require('./controllers/installation');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 app.get('/gallery', async (req, res) => {
   try {
     await gallery.handlers.handleGallery(req, res);
   }
-  catch(all) {
-    console.log(all)
+  catch(err) {
+    console.log(err)
   }
 })
 

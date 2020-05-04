@@ -7,7 +7,6 @@ const db = require('knex')({
 })
 
 const handleGallery = async (req, res) => {
-  // process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   const titles = (await db('main')).map(dbdata => dbdata.title);
 
   const filterdTitles = titles.filter((a, b) => titles.indexOf(a) === b);
