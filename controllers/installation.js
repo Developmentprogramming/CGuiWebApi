@@ -4,7 +4,7 @@ const db = require('knex')({
     host : '127.0.0.1',
     user : 'postgres',
     password : 'Developer@CGui',
-    database : 'Installation'
+    database : 'installation'
   }
 })
 
