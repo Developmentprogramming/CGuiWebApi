@@ -119,7 +119,7 @@ const usage = async (target, db, res) => {
     let codedata;
     const req = https.request(options, (response) => {
       const final = [];
-      response.setEncodeing('utf8');
+      response.setEncoding('utf8');
 
       lr = new linebyline(response);
 
