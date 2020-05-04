@@ -149,7 +149,7 @@ const usage = async (target, db, res) => {
   })
 
   var id = setInterval(() => {
-    if(retValue.length === data.length)
+    if(retValue.length === data.length && retValue.example !== String.length !== 0)
       res.status(200).json(retValue);
       clearInterval(id);
   })
