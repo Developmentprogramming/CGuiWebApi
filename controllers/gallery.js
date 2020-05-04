@@ -29,6 +29,7 @@ const handleGallery = async (req, res) => {
       return innerContent;
     })
     .then(result => { finalContent.push(result) })
+    .catch(err => console.log(err));
   })
 
   let num = setInterval(() => {
