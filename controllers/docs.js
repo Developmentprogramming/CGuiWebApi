@@ -1,3 +1,6 @@
+const https = require('https');
+const linebyline = require('line-by-line');
+
 const getList = async (res, db) => {
   const titles = (await db('docs_list')).map(dbdata => dbdata.title);
 
@@ -106,7 +109,47 @@ const handleDocs = async (req, res, db) => {
 
 const usage = async (target, db, res) => {
   const data = await db('docs_usage').where('title', target).orderBy('arrid');
-  console.log(data);
+  const retValue = data.map(innerData => {
+    const options = {
+      host: innerData.host,
+      path: innerData.path,
+      method: 'GET'
+    }
+
+    let codedata;
+    const req = https.request(options, (response) => {
+      const final = [];
+      response.setEncodeing('utf8');
+
+      lr = new linebyline(response);
+
+      lr.on('error', (err) => {
+        console.log(err);
+      });
+
+      lr.on('line', (line) => {
+        final.push(line);
+      })
+
+      lr.on('end', () => {
+        codedata = final.json('\n');
+      })
+    })
+
+    req.on('error', () => {
+      console.log('error');
+      req.abort();
+    })
+
+    req.end();
+
+    return {
+      example: codedata,
+      resultimgsrc: innerData.imgsrc
+    }
+  })
+
+  res.status(200).json(retValue);
 }
 
 exports.handlers = { usage, handleDocs };
