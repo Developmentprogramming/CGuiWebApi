@@ -143,17 +143,18 @@ const usage = async (target, db, res) => {
 
     req.end();
 
-    while(true) {
+    let finalContent;
+    var id = setInterval(() => {
       if(ok) {
-        return {
+        finalContent = {
           example: final.join('\n'),
           resultimgsrc: innerData.imgsrc
         }
+        clearInterval(id);
       }
-      else {
-        continue;
-      }
-    }
+    })
+
+    return finalContent;
   })
 
   res.status(200).json(retValue);
