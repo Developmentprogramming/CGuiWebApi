@@ -30,7 +30,7 @@ app.get('/gallery', async (req, res) => {
 })
 
 app.get('/docs/:target', (req, res) => {
-  docs.handlers.handleDocs(req, res);
+  docs.handlers.handleDocs(req, res, db);
 })
 
 app.get('/installation/downloadinfo', (req, res) => {

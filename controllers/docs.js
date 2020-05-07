@@ -33,7 +33,7 @@ const handleDocs = async (req, res, db) => {
   const names = (await db('docs_list')).map(dbdata => dbdata.name);
 
   if(req.params.target === 'list')
-    getList(res, db);
+    await getList(res, db);
 
   names.forEach(async name => {
     if(req.params.target === name) {
@@ -149,7 +149,7 @@ const usage = async (target, db, res) => {
   })
 
   var id = setInterval(() => {
-    if(retValue.length === data.length && retValue.example !== String.length !== 0)
+    if(retValue.length === data.length)
       res.status(200).json(retValue);
       clearInterval(id);
   })
