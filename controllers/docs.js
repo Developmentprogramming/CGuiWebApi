@@ -131,7 +131,10 @@ const usage = async (target, db, res) => {
       })
 
       lr.on('end', () => {
-
+        res.status(200).json({
+          example: final.join('\n'),
+          resultimgsrc: innerData.imgsrc
+        })
       })
     })
 
@@ -141,17 +144,6 @@ const usage = async (target, db, res) => {
     })
 
     req.end();
-
-    return {
-      example: final.join('\n'),
-      resultimgsrc: innerData.imgsrc
-    }
-  })
-
-  var id = setInterval(() => {
-    if(retValue.length === data.length)
-      res.status(200).json(retValue);
-      clearInterval(id);
   })
 }
 
