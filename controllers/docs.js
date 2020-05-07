@@ -131,10 +131,10 @@ const usage = async (target, db, res) => {
       })
 
       lr.on('end', () => {
-        res.status(200).json({
+        res.status(200).json([{
           example: final.join('\n'),
           resultimgsrc: innerData.imgsrc
-        })
+        }])
       })
     })
 
