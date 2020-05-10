@@ -5,10 +5,10 @@ A web api for CGui Web app
 
 Installs the all the dependencies.
 
-## `npm start`
+### `npm start`
 
 Runs the server in local.
 
-## Enviromental variables
+### Enviromental variables
 
 **PORT** required to let the server listen on this port
