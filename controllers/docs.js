@@ -40,7 +40,7 @@ const handleDocs = async (req, res, db) => {
       const maindata = await db('docs_main').where('title', name);
       const reladata = (await db('docs_relations').where('title', name)).map(rela => { return { name: rela.name, value: rela.value } });
       const funcdata = (await db('docs_functions').where('title', name).orderBy('arrid')).map(func => { return { returnType: func.returntype, functionSyntax: func.functionsyntax } });
-      const defaultvalues = await db('docs_funcs_defaultvalues').where({ title: name, })
+      const defaultvalues = await db('docs_funcs_defaultvalues').where('title', name)
       const descfunc = (await db('docs_descriptivefunctions').where('title', name).orderBy('arrid')).map(desc => {
         const finaldfValue = [];
 
