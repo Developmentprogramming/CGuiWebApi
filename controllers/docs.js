@@ -109,7 +109,9 @@ const handleDocs = async (req, res, db) => {
 
 const usage = async (target, db, res) => {
   const data = await db('docs_usage').where('title', target).orderBy('arrid');
-  const retValue = data.map(innerData => {
+  const finalContent = []
+
+  data.forEach(innerData => {
     const options = {
       host: innerData.host,
       path: innerData.path,
@@ -131,19 +133,27 @@ const usage = async (target, db, res) => {
       })
 
       lr.on('end', () => {
-        res.status(200).json([{
+        finalContent.push({
           example: final.join('\n'),
           resultimgsrc: innerData.imgsrc
-        }])
+        })
       })
     })
 
-    req.on('error', () => {
-      console.log('error');
+    req.on('error', (e) => {
+      console.log(e)
       req.abort();
+      res.status(400).json(e);
     })
 
     req.end();
+  })
+
+  var id = setInterval(() => {
+    if(data.length === finalContent.length)
+      res.status(200).json(finalContent)
+
+      clearInterval(id)
   })
 }
 
