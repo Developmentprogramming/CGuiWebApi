@@ -51,6 +51,7 @@ const handleDocs = async (req, res, db) => {
                 finaldfValue.push({ target: dfValue.target, value: dfValue.value })
             })
           })
+          clearInterval(id);
         })
 
         return {
