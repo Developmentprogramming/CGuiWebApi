@@ -54,6 +54,11 @@ const handleDocs = async (req, res, db) => {
         //   }
         // })
 
+        var id = setInterval(() => {
+          if(defaultvalues !== Promise && defaultvalues !== null && defaultvalues !== undefined)
+            clearInterval(id);
+        })
+
         return {
           returnType: desc.returntype,
           functionSyntax: desc.functionsyntax,
