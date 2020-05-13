@@ -44,19 +44,15 @@ const handleDocs = async (req, res, db) => {
       const descfunc = (await db('docs_descriptivefunctions').where('title', name).orderBy('arrid')).map(desc => {
         const finaldfValue = [];
 
-        // var id = setInterval(() => {
-        //   if(defaultvalues !== Promise && defaultvalues !== null && defaultvalues !== undefined) {
-        //     defaultvalues.forEach(innerData => {
-        //       if(innerData.functionsyntax === desc.functionsyntax && innerData.arrid === desc.arrid)
-        //         finaldfValue.push({ target: innerData.target, value: innerData.value })
-        //     })
-        //     clearInterval(id);
-        //   }
-        // })
-
         var id = setInterval(() => {
-          if(defaultvalues !== Promise && defaultvalues !== null && defaultvalues !== undefined)
+          if(defaultvalues !== Promise && defaultvalues !== null && defaultvalues !== undefined) {
+            defaultvalues.forEach(innerData => {
+              console.log(innerData)
+              if(innerData.functionsyntax === desc.functionsyntax && innerData.arrid === desc.arrid)
+                finaldfValue.push({ target: innerData.target, value: innerData.value })
+            })
             clearInterval(id);
+          }
         })
 
         return {
@@ -65,10 +61,7 @@ const handleDocs = async (req, res, db) => {
           functionDescription: desc.functiondescription,
           functionNotes: desc.functionnotes,
           returnValue: desc.returnvalue,
-          defaultValues: defaultvalues.map(innerData => {
-            if(innerData.functionsyntax === desc.functionsyntax && innerData.arrid === desc.arrid)
-              return { target: innerData.target, value: innerData.value };
-          })
+          defaultValues: finalContent
         }
       });
       const enums = (await db('docs_enums').where('title', name)).map(e => e.name);
