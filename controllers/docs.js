@@ -45,14 +45,12 @@ const handleDocs = async (req, res, db) => {
         const finaldfValue = [];
 
         var id = setInterval(() => {
-          if(defaultvalues !== Promise && defaultvalues !== null && defaultvalues !== undefined) {
-            defaultvalues.forEach(innerData => {
-              console.log(innerData)
-              if(innerData.functionsyntax === desc.functionsyntax && innerData.arrid === desc.arrid)
-                finaldfValue.push({ target: innerData.target, value: innerData.value })
+          Promise.resolve(defaultvalues).then(innerData => { 
+            innerData.forEach(dfValue => {
+              if(dfValue.functionsyntax === desc.functionsyntax && dfValue.arrid === desc.arrid)
+                finaldfValue.push({ target: dfValue.target, value: dfValue.value })
             })
-            clearInterval(id);
-          }
+          })
         })
 
         return {
