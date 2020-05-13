@@ -42,16 +42,9 @@ const handleDocs = async (req, res, db) => {
       const funcdata = (await db('docs_functions').where('title', name).orderBy('arrid')).map(func => { return { returnType: func.returntype, functionSyntax: func.functionsyntax } });
       const defaultvalues = await db('docs_funcs_defaultvalues').where('title', name)
       const descfunc = (await db('docs_descriptivefunctions').where('title', name).orderBy('arrid')).map(desc => {
-        const finaldfValue = [];
-
-        var id = setInterval(() => {
-          Promise.resolve(defaultvalues).then(innerData => { 
-            innerData.forEach(dfValue => {
-              if(dfValue.functionsyntax === desc.functionsyntax && dfValue.arrid === desc.arrid)
-                finaldfValue.push({ target: dfValue.target, value: dfValue.value })
-            })
-          })
-          clearInterval(id);
+        const finaldfValue = (await Promise.resolve(defaultvalues)).map(innerData => {
+          if(innerData.functionsyntax === desc.functionsyntax && innerData.arrid === desc.arrid)
+            return { target: innerData.target, value: innerData.value};
         })
 
         return {
