@@ -61,7 +61,7 @@ const handleDocs = async (req, res, db) => {
           functionDescription: desc.functiondescription,
           functionNotes: desc.functionnotes,
           returnValue: desc.returnvalue,
-          defaultValues: finalContent
+          defaultValues: finaldfValue
         }
       });
       const enums = (await db('docs_enums').where('title', name)).map(e => e.name);
