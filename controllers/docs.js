@@ -39,7 +39,7 @@ const handleDocs = async (req, res, db) => {
     if(req.params.target === name) {
       const maindata = await db('docs_main').where('title', name);
       const reladata = (await db('docs_relations').where('title', name)).map(rela => { return { name: rela.name, value: rela.value } });
-      const funcdata = (await db('docs_functions').where('title', name).orderBy('arrid')).map(func => { return { returnType: func.returntype, functionSyntax: func.functionsyntax } });
+      const funcdata = (await db('docs_functions').where('title', name).orderBy('arrid')).map(func => { return { returnType: func.returntype, functionSyntax: func.functionsyntax, arrid: func.arrid } });
       const defaultvalues = await db('docs_funcs_defaultvalues').where('title', name)
       const descfunc = (await db('docs_descriptivefunctions').where('title', name).orderBy('arrid')).map(desc => {
         const finaldfValue = []
@@ -61,7 +61,8 @@ const handleDocs = async (req, res, db) => {
           functionDescription: desc.functiondescription,
           functionNotes: desc.functionnotes,
           returnValue: desc.returnvalue,
-          defaultValues: finaldfValue
+          defaultValues: finaldfValue,
+          arrid: desc.arrid
         }
       });
       const enums = (await db('docs_enums').where('title', name)).map(e => e.name);
